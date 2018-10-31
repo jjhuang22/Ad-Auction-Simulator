@@ -22,7 +22,7 @@ def test_mechanism():
     def norm(totals):
         """Normalize total payments by the clicks in each slot"""
         return map(lambda (x,y): x/y, zip(totals, slot_clicks))
-    
+
     # Allocs same as GSP, but payments are different
     reserve = 0
     (alloc, payments) = VCG.compute(slot_clicks, reserve, bids)
@@ -38,7 +38,7 @@ def test_mechanism():
     (alloc, payments) = VCG.compute(slot_clicks, reserve, bids)
     assert alloc == [5,3,4]
     # values, clicks: (20, 4); (18, 3); (14, 2); "(14, 1)"; "(14,0)"
-    # payments: [18+14+14+14 = 60, 14+14+14 = 42, 14, "14'] = 
+    # payments: [18+14+14+14 = 60, 14+14+14 = 42, 14, "14'] =
 
     assert payments == norm([60, 42, 28])
 
@@ -86,3 +86,6 @@ def test_bid_ranges():
     assert bid_range(0, reserve) == (22, None)
     assert bid_range(1, reserve) == (22, 22)
     assert bid_range(2, reserve) == (22, 22)
+
+test_bid_ranges()
+test_mechanism()

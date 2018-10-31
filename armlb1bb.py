@@ -49,6 +49,7 @@ class Armlb1bb:
 
         returns a list of utilities per slot.
         """
+        my_slot_info = self.slot_info(t, history, reserve)
         prev_round = history.round(t-1)
         utilities = []
         other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids)

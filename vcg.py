@@ -27,7 +27,7 @@ class VCG:
         """
 
         # The allocation is the same as GSP, so we filled that in for you...
-        
+
         valid = lambda (a, bid): bid >= reserve
         valid_bids = filter(valid, bids)
 
@@ -41,7 +41,7 @@ class VCG:
         allocated_bids = valid_bids[:num_slots]
         if len(allocated_bids) == 0:
             return ([], [])
-        
+
         (allocation, just_bids) = zip(*allocated_bids)
 
         # TODO: You just have to implement this function
@@ -52,7 +52,17 @@ class VCG:
             c = slot_clicks
             n = len(allocation)
 
-            # TODO: Compute the payment and return it.
+            # Compute the payment and return it.
+
+            if k < n - 1:
+                return (c[k]-c[k+1])*just_bids[k+1]+total_payment(k+1)
+            elif k == n-1:
+                if len(valid_bids) <= num_slots:
+                    return c[k]*reserve
+                else:
+                    return c[k]*valid_bids[num_slots][1]
+            elif k >= n:
+                return 0
 
         def norm(totals):
             """Normalize total payments by the clicks in each slot"""
@@ -60,7 +70,7 @@ class VCG:
 
         per_click_payments = norm(
             [total_payment(k) for k in range(len(allocation))])
-        
+
         return (list(allocation), per_click_payments)
 
     @staticmethod
