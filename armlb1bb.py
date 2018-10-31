@@ -49,10 +49,12 @@ class Armlb1bb:
 
         returns a list of utilities per slot.
         """
-        # TODO: Fill this in
-        utilities = []   # Change this
-
-
+        prev_round = history.round(t-1)
+        utilities = []
+        for (bid, pos, t) in zip(prev_round.bids, prev_round.clicks, prev_round.per_click_payments):
+            utilities.append(pos * (self.value - bid[1]))
+        if not utilities:
+            utilities= [0]
         return utilities
 
     def target_slot(self, t, history, reserve):
@@ -79,11 +81,18 @@ class Armlb1bb:
         # If s*_j is the top slot, bid the value v_j
 
         prev_round = history.round(t-1)
-        (slot, min_bid, max_bid) = self.target_slot(t, history, reserve)
+        (j, min_bid, max_bid) = self.target_slot(t, history, reserve)
 
-        # TODO: Fill this in.
-        bid = 0  # change this
-
+        # utilites = []
+        # for (bid, pos, t) in zip(prev_round.bids, prev_round.clicks, prev_round.per_click_payments):
+        #     utilities.append(pos * (self.value - bid))
+        # j = argmax_index(utilities)
+        if min_bid >= self.value:
+            bid = self.value
+        elif j > 0:
+            bid = min(max_bid, self.value - float(prev_round.clicks[j])/prev_round.clicks[j-1]*(self.value - prev_round.per_click_payments[j]))
+        else:
+            bid = self.value
         return bid
 
     def __repr__(self):
