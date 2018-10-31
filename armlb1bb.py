@@ -49,9 +49,11 @@ class Armlb1bb:
 
         returns a list of utilities per slot.
         """
-        # TODO: Fill this in
-        utilities = []   # Change this
+        my_slot_info = self.slot_info(t, history, reserve)
+        prev_round = history.round(t-1)
+        clicks = prev_round.clicks
 
+        utilities = [clicks[i] * (self.value - my_slot_info[i][1]) for i in range(len(my_slot_info))]
 
         return utilities
 
@@ -81,8 +83,12 @@ class Armlb1bb:
         prev_round = history.round(t-1)
         (slot, min_bid, max_bid) = self.target_slot(t, history, reserve)
 
-        # TODO: Fill this in.
-        bid = 0  # change this
+        clicks = prev_round.clicks
+        bid = 0
+        if min_bid >= self.value or slot == 0:
+            bid = self.value
+        else:
+            bid = self.value - clicks[slot] / clicks[slot-1] * (self.value - min_bid)
 
         return bid
 
