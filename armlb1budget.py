@@ -13,7 +13,7 @@ class Armlb1budget:
         self.budget = budget
 
     def initial_bid(self, reserve):
-        return self.value / 2
+        return 0
 
 
     def slot_info(self, t, history, reserve):
@@ -49,10 +49,20 @@ class Armlb1budget:
 
         returns a list of utilities per slot.
         """
-        # TODO: Fill this in
-        utilities = []   # Change this
-
-
+        my_slot_info = self.slot_info(t, history, reserve)
+        prev_round = history.round(t-1)
+        utilities = []
+        other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids)
+        other_bids.sort(key=lambda x: x[1])
+        other_bids = other_bids[::-1]
+        # other_clicks = filter(lambda (a_id, b): a_id != self.id, zip(prev_round.occupants, prev_round.clicks))
+        for ind in range(len(other_bids)):
+            if ind == len(prev_round.clicks) - 1:
+                utilities.append(prev_round.clicks[ind] * (self.value - reserve))
+            else:
+                utilities.append(prev_round.clicks[ind] * (self.value - other_bids[ind][1]))
+        if not utilities:
+            utilities= [0]
         return utilities
 
     def target_slot(self, t, history, reserve):
@@ -79,11 +89,19 @@ class Armlb1budget:
         # If s*_j is the top slot, bid the value v_j
 
         prev_round = history.round(t-1)
-        (slot, min_bid, max_bid) = self.target_slot(t, history, reserve)
-
-        # TODO: Fill this in.
-        bid = 0  # change this
-
+        (j, min_bid, max_bid) = self.target_slot(t, history, reserve)
+        other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids)
+        # other_payments = filter(lambda (a_id, b): a_id != self.id, zip(prev_round.occupants, prev_round.per_click_payments)) + [0]
+        # utilites = []
+        # for (bid, pos, t) in zip(prev_round.bids, prev_round.clicks, prev_round.per_click_payments):
+        #     utilities.append(pos * (self.value - bid))
+        # j = argmax_index(utilities)
+        if min_bid > self.value or j==0:
+            bid = self.value
+        elif j == len(prev_round.clicks) - 1:
+            bid = self.value - float(prev_round.clicks[j])/prev_round.clicks[j-1]*float(self.value - reserve)
+        elif j > 0:
+            bid = self.value - float(prev_round.clicks[j])/prev_round.clicks[j-1]*float(self.value - min_bid)
         return bid
 
     def __repr__(self):
