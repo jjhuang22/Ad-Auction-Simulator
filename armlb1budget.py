@@ -99,11 +99,9 @@ class Armlb1budget:
         # j = argmax_index(utilities)
         if min_bid > self.value or j==0:
             bid = self.value
-        elif j == len(prev_round.clicks) - 1:
-            bid = self.value - float(prev_round.clicks[j])/prev_round.clicks[j-1]*float(self.value - reserve)
         elif j > 0:
-            bid = self.value - float(prev_round.clicks[j])/prev_round.clicks[j-1]*float(self.value - min_bid)
-        return bid
+            bid = self.value - float(prev_round.clicks[j])/prev_round.clicks[j-1]*float(max((self.value - min_bid), reserve))
+        return min_bid + 0.001
 
     def __repr__(self):
         return "%s(id=%d, value=%d)" % (
