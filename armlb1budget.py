@@ -14,7 +14,7 @@ class Armlb1budget:
         self.budget = budget
 
     def initial_bid(self, reserve):
-        return self.value / 4
+        return self.value / 2
 
 
     def slot_info(self, t, history, reserve):
@@ -97,11 +97,11 @@ class Armlb1budget:
         # for (bid, pos, t) in zip(prev_round.bids, prev_round.clicks, prev_round.per_click_payments):
         #     utilities.append(pos * (self.value - bid))
         # j = argmax_index(utilities)
-        if min_bid > self.value or j==0:
-            bid = self.value
+        if min_bid > self.value:
+            return self.value
         elif j > 0:
             bid = self.value - float(prev_round.clicks[j])/prev_round.clicks[j-1]*float(max((self.value - min_bid), reserve))
-        return min_bid + 0.001
+        return min_bid + 0.01
 
     def __repr__(self):
         return "%s(id=%d, value=%d)" % (
