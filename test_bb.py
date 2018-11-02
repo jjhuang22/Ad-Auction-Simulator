@@ -36,7 +36,6 @@ def test_bb():
     a3 = Armlb1bb(3, 20, budget)
 
     # a1's utils for slots: [3 * (8-10), 2*(8-5), 0] = [-6, 6, 0]
-    print a1.expected_utils(t, history, reserve)
     assert a1.expected_utils(t, history, reserve) == [-6, 6, 0]
     assert a1.target_slot(t, history, reserve) == (1, 5, 10)
     # bid for slot 1: 8 - 2/3 * (8 - 5) = 8 - 2/3(3) = 6
