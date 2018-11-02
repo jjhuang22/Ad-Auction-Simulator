@@ -55,14 +55,13 @@ class Armlb1bb:
         other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids) + [(self.id, 0)]
         other_bids.sort(key=lambda x: x[1])
         other_bids = other_bids[::-1]
+        prev_clicks = prev_round.clicks + [0]
         # other_clicks = filter(lambda (a_id, b): a_id != self.id, zip(prev_round.occupants, prev_round.clicks))
         for ind in range(len(other_bids)):
             if ind == len(prev_round.clicks) - 1:
-                utilities.append(prev_round.clicks[ind] * (self.value - reserve))
+                utilities.append(prev_clicks[ind] * (self.value - reserve))
             else:
-                utilities.append(prev_round.clicks[ind] * (self.value - other_bids[ind][1]))
-        if not utilities:
-            utilities= [0]
+                utilities.append(prev_clicks[ind] * (self.value - other_bids[ind][1]))
         return utilities
 
     def target_slot(self, t, history, reserve):
