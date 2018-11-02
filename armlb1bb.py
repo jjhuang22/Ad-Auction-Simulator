@@ -60,7 +60,7 @@ class Armlb1bb:
             if ind == len(prev_clicks) - 2:
                 utilities.append(prev_clicks[ind] * (self.value - reserve))
             else:
-                utilities.append(prev_clicks[ind] * (self.value - max(reserve, other_bids[ind][1])))
+                utilities.append(prev_clicks[ind] * (self.value - other_bids[ind][1]))
         return utilities
 
     def target_slot(self, t, history, reserve):
@@ -93,10 +93,10 @@ class Armlb1bb:
         if min_bid > self.value or j==0:
             bid = self.value
         elif j == len(prev_round.clicks) - 1:
-            bid = self.value - float(prev_round.clicks[j])/prev_round.clicks[j-1]*float(self.value - min_bid)
+            bid = self.value - float(prev_round.clicks[j])/prev_round.clicks[j-1]*float(self.value - reserve)
         elif j > 0:
             bid = self.value - float(prev_round.clicks[j])/prev_round.clicks[j-1]*float(self.value - min_bid)
-        return bid
+        return min(self.budget/48.0, bid)
 
     def __repr__(self):
         return "%s(id=%d, value=%d)" % (
