@@ -4,6 +4,7 @@ import sys
 
 from gsp import GSP
 from util import argmax_index
+import math
 
 class Armlb1budget:
     """Balanced bidding agent"""
@@ -102,7 +103,7 @@ class Armlb1budget:
             bid = self.value - float(prev_round.clicks[j])/prev_round.clicks[j-1]*float(self.value - reserve)
         elif j > 0:
             bid = self.value - float(prev_round.clicks[j])/prev_round.clicks[j-1]*float(self.value - min_bid)
-        return bid
+        return min_bid
 
     def __repr__(self):
         return "%s(id=%d, value=%d)" % (
