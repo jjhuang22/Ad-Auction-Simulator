@@ -52,7 +52,7 @@ class Armlb1bb:
         my_slot_info = self.slot_info(t, history, reserve)
         prev_round = history.round(t-1)
         utilities = []
-        other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids)
+        other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids) + [(self.id, 0)]
         other_bids.sort(key=lambda x: x[1])
         other_bids = other_bids[::-1]
         # other_clicks = filter(lambda (a_id, b): a_id != self.id, zip(prev_round.occupants, prev_round.clicks))
@@ -90,7 +90,7 @@ class Armlb1bb:
 
         prev_round = history.round(t-1)
         (j, min_bid, max_bid) = self.target_slot(t, history, reserve)
-        other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids)
+        other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids) + [0]
         # other_payments = filter(lambda (a_id, b): a_id != self.id, zip(prev_round.occupants, prev_round.per_click_payments)) + [0]
         # utilites = []
         # for (bid, pos, t) in zip(prev_round.bids, prev_round.clicks, prev_round.per_click_payments):

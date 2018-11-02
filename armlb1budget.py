@@ -13,7 +13,7 @@ class Armlb1budget:
         self.budget = budget
 
     def initial_bid(self, reserve):
-        return 0
+        return self.value / 4
 
 
     def slot_info(self, t, history, reserve):
